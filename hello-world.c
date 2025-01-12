@@ -9,6 +9,16 @@
 #define MAX_TIME_OF_DAY_LENGTH 20
 #define MAX_INPUT_STRING_LENGTH 100
 
+/**
+ * Clears the terminal screen.
+ *
+ * This function executes a system command to clear the terminal. It uses "cls"
+ * on Windows systems and "clear" on Unix-like systems, including Linux, macOS,
+ * and other UNIX derivatives.
+ *
+ * Note: The behavior of this function is dependent on the underlying operating
+ * system's terminal and may not work in some IDEs or non-terminal environments.
+ */
 void clear_screen()
 {
 #ifdef _WIN32
@@ -18,12 +28,42 @@ void clear_screen()
 #endif
 }
 
+/**
+ * Clears the input buffer.
+ *
+ * This function reads and discards all characters from the standard input
+ * until it encounters a newline character ('\n'). It is typically used to clear
+ * any remaining characters left in the input buffer, which can be useful after
+ * reading user input with functions like `scanf` that may leave trailing data.
+ */
 void clear_input_buffer()
 {
     while ((getchar()) != '\n')
         ;
 }
 
+/**
+ * Builds a selection prompt with provided title and options.
+ *
+ * This function constructs a string that represents a menu or selection prompt
+ * by concatenating a given title followed by multiple option strings. The result
+ * is appended to the target buffer passed as an argument.
+ *
+ * @param char *target A pointer to the destination buffer where the constructed
+ *                     prompt will be stored. It should have sufficient space to
+ *                     hold the resulting string.
+ * @param char *title A null-terminated string representing the title or main
+ *                    heading of the prompt.
+ * @param char **options An array of pointers to null-terminated strings, each
+ *                       representing an option in the selection menu.
+ * @param int num_options The number of options provided in the options array.
+ *                        This should match the actual count of elements in the
+ *                        options array.
+ *
+ * Note: Ensure that `target` has enough space allocated to hold the combined length
+ * of the title, all options, and additional characters like newline '\n'. Buffer
+ * overflow could occur if this is not managed properly.
+ */
 void build_selection_prompt(char *target, char *title, char **options, int num_options)
 {
     strcat(target, title);
@@ -36,6 +76,17 @@ void build_selection_prompt(char *target, char *title, char **options, int num_o
     }
 }
 
+/**
+ * Asks the user whether they would like to continue or not.
+ *
+ * This function prompts the user with "Continue (y/N): " and reads their input.
+ * It uses `scanf` with a space before `%c` to ignore any leftover newline characters in the buffer,
+ * then converts the input to lowercase using `tolower`. If the user inputs 'n', it returns 0, indicating
+ * that they do not wish to continue. For any other input, including no input (defaulting to 'N'),
+ * it returns 1, allowing continuation.
+ *
+ * @return int: Returns 1 if the user wants to continue, otherwise returns 0.
+ */
 int can_continue()
 {
     printf("Continue (y/N): ");
@@ -52,6 +103,13 @@ int can_continue()
     return 1;
 }
 
+/**
+ * Outputs "Hello, World!" to the console repeatedly until the user decides not to continue.
+ *
+ * This function enters an infinite loop where it prints "Hello, World!" followed by a newline character.
+ * After each message is printed, the function checks if the user wants to continue. If the user chooses not
+ * to continue (by responding with any input other than 'y' or 'Y'), the loop breaks and the function ends.
+ */
 void basic_hello()
 {
     while (1)
@@ -65,6 +123,14 @@ void basic_hello()
     }
 }
 
+/**
+ * personalized_greeting - Interactively greets a user by name.
+ *
+ * This function repeatedly prompts the user to enter a name and then greets them
+ * with "Hello, [name]! Welcome to the program." It continues to ask for names until
+ * the user decides not to continue. The function checks if the user wants to repeat
+ * the greeting or exit using the can_continue() function.
+ */
 void personalized_greeting()
 {
     while (1)
@@ -84,6 +150,15 @@ void personalized_greeting()
     }
 }
 
+/**
+ * The `time_greeting` function prompts the user to enter the current time in 24-hour format and provides an appropriate greeting based on the hour of the day.
+ *
+ * It continues to ask for input until a valid time is entered or the user decides not to continue. A valid time must have hours between 0 and 24, and minutes between 0 and 60.
+ * Depending on the time provided, it will display "Good morning, World!", "Good afternoon, World!", "Good evening, World!", or "Good night, World!".
+ *
+ * The function handles invalid inputs by prompting the user to enter a valid time again. It uses `clear_input_buffer()` to discard any extra input after an incorrect entry.
+ * After displaying the greeting, it asks if the user wants to continue with another input; if not, the loop breaks and the function ends.
+ */
 void time_greeting()
 {
     while (1)
@@ -138,6 +213,19 @@ void time_greeting()
     }
 }
 
+/**
+ * Prompts the user to select a language and greets them in that language.
+ *
+ * The function presents three languages: English, Khmer, and French.
+ * It repeatedly prompts the user to choose one of these options by entering
+ * a corresponding number. Based on the input, it displays "Hello world!"
+ * for English, "សួរស្តី ពិភពលោក!" for Khmer, and "Bonjour le monde!" for French.
+ *
+ * If the user inputs an invalid selection, they are asked to try again.
+ * The loop continues until the user decides not to continue by responding negatively
+ * when prompted with "Repeat or exit?". The prompt text is dynamically built using
+ * `build_selection_prompt` which includes options and their indices.
+ */
 void multi_language_hello()
 {
     char *languages[NUM_LANGUAGES] = {
@@ -188,6 +276,11 @@ void multi_language_hello()
     }
 }
 
+/**
+ * Repeatedly prompts the user to specify how many times "Hello World!" should be printed,
+ * then displays the message that number of times. Continues until the user opts not to continue.
+ * Validates input to ensure it is a non-negative integer, prompting again if invalid input is detected.
+ */
 void repeated_greeting()
 {
     while (1)
@@ -218,6 +311,22 @@ void repeated_greeting()
     }
 }
 
+/**
+ * Function Name: age_based_hello
+ *
+ * The docstring:
+ * Interactively asks the user for their age and provides a personalized greeting based on
+ * specific age groups. It continues to prompt until the user chooses not to continue.
+ * Valid ages are positive integers, with customized messages for different life stages:
+ * - 0-10: "Hey there, baby friend! Welcome to the world of programming!"
+ * - 11-18: "Hey there, teen friend! Welcome to the world of programming!"
+ * - 19-25: "Hey there, young adult friend! Welcome to the world of programming!"
+ * - 26-40: "Hey there, adult friend! Welcome to the world of programming!"
+ * - Above 40: "Hey there, senior friend! Welcome to the world of programming!"
+ * The function ensures input validity by checking for non-negative integers and prompts again
+ * if invalid data is entered. It uses `clear_input_buffer()` to clear any extraneous input
+ * after a failed age entry.
+ */
 void age_based_hello()
 {
     while (1)
@@ -264,6 +373,15 @@ void age_based_hello()
     }
 }
 
+/**
+ * Displays a predefined ASCII art piece consisting of six lines.
+ * Continuously shows the entire art until the user chooses not to continue.
+ *
+ * The function uses an array of strings, each representing a line of the ASCII art,
+ * and prints them sequentially. After displaying the art once, it prompts the user
+ * with `can_continue()`. If the user opts not to continue, the loop breaks;
+ * otherwise, the art is displayed again.
+ */
 void ascii_art()
 {
     char *art[6] = {
