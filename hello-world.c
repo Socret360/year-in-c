@@ -1,32 +1,14 @@
 #include <stdio.h>  // scanf, printf
-#include <stdlib.h> // system
 #include <ctype.h>  // tolower
 #include <string.h> // strcat, strcpy
+
+#include "utils.c"
 
 #define NUM_MODES 8
 #define NUM_LANGUAGES 3
 #define MAX_PROMPT_LENGTH 1000
 #define MAX_TIME_OF_DAY_LENGTH 20
 #define MAX_INPUT_STRING_LENGTH 100
-
-/**
- * Clears the terminal screen.
- *
- * This function executes a system command to clear the terminal. It uses "cls"
- * on Windows systems and "clear" on Unix-like systems, including Linux, macOS,
- * and other UNIX derivatives.
- *
- * Note: The behavior of this function is dependent on the underlying operating
- * system's terminal and may not work in some IDEs or non-terminal environments.
- */
-void clear_screen()
-{
-#ifdef _WIN32
-    system("cls");
-#elif __linux__ || __unix__ || __APPLE__
-    system("clear");
-#endif
-}
 
 /**
  * Clears the input buffer.
@@ -92,7 +74,7 @@ int can_continue()
     printf("Continue (y/N): ");
 
     char selected = 'N';
-    int result = scanf(" %c", &selected); // notice the SPACE character in front of %c, that is to not have scanf read left-over newline characters.
+    scanf(" %c", &selected); // notice the SPACE character in front of %c, that is to not have scanf read left-over newline characters.
     selected = tolower(selected);
 
     if (selected == 'n')
