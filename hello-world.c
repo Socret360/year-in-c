@@ -11,20 +11,6 @@
 #define MAX_INPUT_STRING_LENGTH 100
 
 /**
- * Clears the input buffer.
- *
- * This function reads and discards all characters from the standard input
- * until it encounters a newline character ('\n'). It is typically used to clear
- * any remaining characters left in the input buffer, which can be useful after
- * reading user input with functions like `scanf` that may leave trailing data.
- */
-void clear_input_buffer()
-{
-    while ((getchar()) != '\n')
-        ;
-}
-
-/**
  * Builds a selection prompt with provided title and options.
  *
  * This function constructs a string that represents a menu or selection prompt
@@ -56,33 +42,6 @@ void build_selection_prompt(char *target, char *title, char **options, int num_o
         strcat(target, options[i]);
         strcat(target, "\n");
     }
-}
-
-/**
- * Asks the user whether they would like to continue or not.
- *
- * This function prompts the user with "Continue (y/N): " and reads their input.
- * It uses `scanf` with a space before `%c` to ignore any leftover newline characters in the buffer,
- * then converts the input to lowercase using `tolower`. If the user inputs 'n', it returns 0, indicating
- * that they do not wish to continue. For any other input, including no input (defaulting to 'N'),
- * it returns 1, allowing continuation.
- *
- * @return int: Returns 1 if the user wants to continue, otherwise returns 0.
- */
-int can_continue()
-{
-    printf("Continue (y/N): ");
-
-    char selected = 'N';
-    scanf(" %c", &selected); // notice the SPACE character in front of %c, that is to not have scanf read left-over newline characters.
-    selected = tolower(selected);
-
-    if (selected == 'n')
-    {
-        return 0;
-    }
-
-    return 1;
 }
 
 /**
